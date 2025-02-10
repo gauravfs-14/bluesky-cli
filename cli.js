@@ -72,7 +72,13 @@ async function main() {
     ]);
     
     const { postLimit } = await inquirer.prompt([
-        { type: 'number', name: 'postLimit', message: 'How many posts do you want to fetch?', default: 10 }
+        { 
+            type: 'number', 
+            name: 'postLimit', 
+            message: 'How many posts do you want to fetch?', 
+            default: 10,
+            validate: input => input > 0 || 'Please enter a positive number.'
+        }
     ]);
     
     const { startDate, endDate } = await inquirer.prompt([
@@ -92,7 +98,7 @@ async function main() {
     const formattedEndDate = `${endDate}T23:59:59Z`;
     
     const params = {
-        q: searchTerms,
+        q: searchTerms.split(',').map(term => term.trim()).join(' '),
         limit: postLimit,
         since: formattedStartDate,
         until: formattedEndDate,

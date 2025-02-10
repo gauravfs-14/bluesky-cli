@@ -16,6 +16,7 @@
     "axios": "^1.7.9",
     "commander": "^13.1.0",
     "inquirer": "^12.4.1",
+    "json2csv": "^6.0.0-alpha.2",
     "ora": "^8.2.0"
   }
 }

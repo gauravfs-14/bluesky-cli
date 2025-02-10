@@ -6,7 +6,7 @@
 ![GitHub stars](https://img.shields.io/github/stars/gauravfs-14/bluesky-cli)
 ![GitHub issues](https://img.shields.io/github/issues/gauravfs-14/bluesky-cli)
 
-🔎 **Bluesky CLI** is a powerful command-line tool that allows users to search for public posts on **Bluesky** using specific search terms. The results are saved as **JSON**, and optionally, as an **HTML** file for easy viewing.
+🔎 **Bluesky CLI** is a powerful command-line tool that allows users to search for public posts on **Bluesky** using specific search terms. The results are saved as **JSON**, and optionally, as an **CSV** file for easy viewing.
 
 ## ✨ Features
 
@@ -14,7 +14,7 @@
 ✅ Search for posts using **keywords**.  
 ✅ Filter results by **date range**.  
 ✅ Sort results by **latest** or **top**.  
-✅ Save results in **JSON** and optionally in **HTML** format.  
+✅ Save results in **JSON** and optionally in **CSV** format.  
 ✅ Customize the **file name** for saved outputs.
 
 ---
@@ -69,13 +69,13 @@ $ bluesky-cli search
 ✔ Enter the end date: 2023-12-31
 ✔ Choose sorting order: latest
 ✔ Enter the base file name: bluesky_posts
-✔ Do you want an HTML output? Yes
+✔ Do you want an CSV output? Yes
 ```
 
 ### 📂 Output Files
 
 - **`bluesky_posts.json`** → JSON file containing search results.
-- **`bluesky_posts.html`** → HTML file displaying posts (if selected).
+- **`bluesky_posts.csv`** → CSV file displaying posts (if selected).
 
 ---
 

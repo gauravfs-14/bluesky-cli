@@ -1,11 +1,10 @@
-#!/usr/bin/env node
-
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
 import axios from 'axios';
 import { program } from 'commander';
 import ora from 'ora';
+import { parse } from 'json2csv';
 
 const BLUESKY_AUTH_URL = 'https://bsky.social/xrpc/com.atproto.server.createSession';
 const BLUESKY_API_URL = 'https://bsky.social/xrpc/app.bsky.feed.searchPosts';
@@ -28,6 +27,18 @@ async function authenticate(username, password) {
 
 function convertUriToWebUrl(uri) {
     return uri.replace('at://', 'https://bsky.app/profile/').replace('/app.bsky.feed.post/', '/post/');
+}
+
+function flattenObject(obj, prefix = '') {
+    return Object.keys(obj).reduce((acc, key) => {
+        const propName = prefix ? `${prefix}.${key}` : key;
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+            Object.assign(acc, flattenObject(obj[key], propName));
+        } else {
+            acc[propName] = obj[key];
+        }
+        return acc;
+    }, {});
 }
 
 async function searchBlueskyPosts(params, accessToken) {
@@ -96,49 +107,20 @@ async function main() {
     fs.writeFileSync(path.join(process.cwd(), `${fileName}.json`), JSON.stringify(posts, null, 2));
     console.log(`JSON file saved at: ${path.join(process.cwd(), `${fileName}.json`)}`);
     
-    const { generateHtml } = await inquirer.prompt([
-        { type: 'confirm', name: 'generateHtml', message: 'Do you want an HTML output?', default: true }
+    const { generateCsv } = await inquirer.prompt([
+        { type: 'confirm', name: 'generateCsv', message: 'Do you want a CSV output?', default: true }
     ]);
     
-    if (generateHtml) {
-        const htmlContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluesky Search Results</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .post { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
-        .post strong { color: #007bff; }
-        .metadata { font-size: 12px; color: gray; }
-        .post img, .post video { max-width: 100%; height: auto; margin-top: 10px; }
-    </style>
-</head>
-<body>
-    <h1>Bluesky Search Results</h1>
-    ${posts.map(post => {
-        const postUrl = convertUriToWebUrl(post.uri);
-        return `
-        <div class="post">
-            <strong>${post.author?.displayName || 'Unknown Author'}</strong> (@${post.author?.handle || 'Unknown'})
-            <p>${post.record?.text || 'No content'}</p>
-            <div class="metadata">
-                <p>Created At: ${post.createdAt || 'N/A'}</p>
-                <p>Likes: ${post.likeCount || 0} | Replies: ${post.replyCount || 0} | Reposts: ${post.repostCount || 0}</p>
-                <p><a href="${postUrl}" target="_blank">View Post</a></p>
-            </div>
-        </div>`;
-    }).join('')}
-</body>
-</html>`;
-        fs.writeFileSync(path.join(process.cwd(), `${fileName}.html`), htmlContent);
-        console.log(`HTML file saved at: ${path.join(process.cwd(), `${fileName}.html`)}`);
+    if (generateCsv) {
+        const flattenedPosts = posts.map(post => flattenObject(post));
+        const csv = parse(flattenedPosts);
+        fs.writeFileSync(path.join(process.cwd(), `${fileName}.csv`), csv);
+        console.log(`CSV file saved at: ${path.join(process.cwd(), `${fileName}.csv`)}`);
     }
 }
 
 program.command('search')
-    .description('Search for Bluesky posts and save them as JSON and HTML')
+    .description('Search for Bluesky posts and save them as JSON, CSV, and HTML')
     .action(main);
 
 program.parse(process.argv);

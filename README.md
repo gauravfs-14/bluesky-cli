@@ -38,6 +38,8 @@ npm install -g bluesky-cli
 
 ## 🛠 Usage
 
+Navigate to the folder you want to save the response to. And then open a terminal window there.
+
 Run the CLI tool:
 
 ```sh

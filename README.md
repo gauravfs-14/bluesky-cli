@@ -6,23 +6,29 @@
 ![GitHub stars](https://img.shields.io/github/stars/gauravfs-14/bluesky-cli)
 ![GitHub issues](https://img.shields.io/github/issues/gauravfs-14/bluesky-cli)
 
-🔎 **Bluesky CLI** is a powerful command-line tool that allows users to search for public posts on **Bluesky** using specific search terms. The results are saved as **JSON**, and optionally, as an **CSV** file for easy viewing.
+Bluesky CLI now offers two modes:
 
-## ✨ Features
+## Features
 
-✅ Authenticate using a **Bluesky handle** and **App Password**.  
-✅ Search for posts using **keywords**.  
-✅ Filter results by **date range**.  
-✅ Sort results by **latest** or **top**.  
-✅ Save results in **JSON** and optionally in **CSV** format.  
-✅ Customize the **file name** for saved outputs.
+### Search Mode
+
+- **Authenticate** using your Bluesky handle and App Password.
+- **Search posts** by entering keyword(s) and number of posts to fetch.
+- Results are saved as JSON (`posts.json`) and CSV (`posts.csv`).
+
+### Firehose Mode
+
+- **Stream live posts** from the Bluesky Jetstream API.
+- **Filter posts** using comma-separated keywords.
+- Captured posts are stored in an SQLite database (`bluesky_posts.db`).
 
 ---
 
 ## ⚙️ Prerequisites
 
 - **Node.js & NPM** installed.
-- A **Bluesky account**.
+- Valid **Bluesky account** credentials.
+- SQLite support (automatically handled via dependencies).
 
 ---
 
@@ -40,13 +46,15 @@ npm install -g bluesky-cli
 
 Navigate to the folder you want to save the response to. And then open a terminal window there.
 
+### Search Mode
+
 Run the CLI tool:
 
 ```sh
 bluesky-cli search
 ```
 
-### 📝 Step-by-Step Walkthrough
+#### 📝 Step-by-Step Walkthrough
 
 Once you run the command, the CLI will prompt you for:
 1️⃣ **Bluesky Handle & App Password** (for authentication)  
@@ -57,7 +65,7 @@ Once you run the command, the CLI will prompt you for:
 6️⃣ **File Name** (for saving results)  
 7️⃣ **Generate HTML Output?** (Yes/No)
 
-### 🔍 Example Usage
+#### 🔍 Example Usage
 
 ```sh
 $ bluesky-cli search
@@ -65,17 +73,38 @@ $ bluesky-cli search
 ✔ Enter your Bluesky App Password:
 ✔ Enter search terms: AI, Machine Learning
 ✔ How many posts do you want to fetch? 10
-✔ Enter the start date: 2023-01-01
-✔ Enter the end date: 2023-12-31
-✔ Choose sorting order: latest
-✔ Enter the base file name: bluesky_posts
-✔ Do you want an CSV output? Yes
 ```
 
-### 📂 Output Files
+#### 📂 Output Files
 
 - **`bluesky_posts.json`** → JSON file containing search results.
 - **`bluesky_posts.csv`** → CSV file displaying posts (if selected).
+
+### Firehose Mode
+
+Run the CLI tool:
+
+```sh
+bluesky-cli firehose
+```
+
+#### 📝 Step-by-Step Walkthrough
+
+Once you run the command, the CLI will prompt you for:
+1️⃣ **Bluesky Handle & App Password** (for authentication)  
+2️⃣ **Keywords** (comma-separated keywords to filter posts)  
+3️⃣ **Database File Name** (for storing posts)
+
+#### 🔍 Example Usage
+
+```sh
+$ bluesky-cli firehose
+✔ Enter keywords: AI, Machine Learning
+```
+
+#### 📂 Output Files
+
+- **`bluesky_firehose.db`** → SQLite database file containing captured posts.
 
 ---
 

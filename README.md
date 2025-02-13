@@ -20,6 +20,7 @@ Bluesky CLI now offers two modes:
 
 - **Stream live posts** from the Bluesky Jetstream API.
 - **Filter posts** using comma-separated keywords.
+  - _New:_ If a keyword contains an underscore (e.g., `bike_commute`), underscores are replaced with spaces so that the tool filters for the exact phrase (i.e. "bike commute").
 - Captured posts are stored in an SQLite database (`bluesky_posts.db`).
 
 ---
@@ -99,7 +100,7 @@ Once you run the command, the CLI will prompt you for:
 
 ```sh
 $ bluesky-cli firehose
-✔ Enter keywords: AI, Machine Learning
+✔ Enter keywords: AI, Machine_Learning
 ```
 
 #### 📂 Output Files

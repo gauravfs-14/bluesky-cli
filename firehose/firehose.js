@@ -86,7 +86,10 @@ async function subscribeToJetstream(keywords) {
         //   console.log(chalk.gray(`🔍 Checking post: ${text}`));
 
           // ✅ Match keyword filter
-          if (keywords.some((kw) => text.toLowerCase().includes(kw.toLowerCase()))) {
+          if (keywords.some((kw) => {
+              const searchPhrase = kw.includes("_") ? kw.replace(/_/g, " ") : kw;
+              return text.toLowerCase().includes(searchPhrase.toLowerCase());
+          })) {
             console.log(chalk.green(`\n📌 MATCHED POST from ${authorDid}:`));
             console.log(chalk.yellow(text));
             console.log(chalk.magenta(`🔗 Post ID: ${postId}\n`));
